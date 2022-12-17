@@ -89,7 +89,7 @@ int Enqueue(Queue *pQueue, Task t)
         item->prev = pQueue->head;
         pQueue->head = item;
         // pQueue->head->prev = oldFront;
-        printf("\n\n");
+        /*printf("\n\n");
         printf("\nNEW ZEALANDER ADDED TO FRONT OF THE QUEUE!\n");
         NODE *iterate = pQueue->head;
 
@@ -98,7 +98,7 @@ int Enqueue(Queue *pQueue, Task t)
             printf("queue data: %d, queue type: %d\n", iterate->data.ID, iterate->data.type);
             iterate = iterate->prev;
         }
-        printf("\n\n");
+        printf("\n\n");*/
     }
     else if (pQueue->size == 0)
     {
