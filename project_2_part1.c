@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-int simulationTime = 1200;	 // simulation time
+int simulationTime = 120;	 // simulation time
 int seed = 10;				 // seed for randomness
 int emergencyFrequency = 30; // frequency of emergency gift requests from New Zealand
 

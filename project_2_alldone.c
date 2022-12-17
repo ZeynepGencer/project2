@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-int simulationTime = 1200;	 // simulation time
+int simulationTime = 120;	 // simulation time
 int seed = 10;				 // seed for randomness
 int emergencyFrequency = 30; // frequency of emergency gift requests from New Zealand
 
@@ -197,7 +197,7 @@ void *ElfA(void *arg)
 		if (ContainsNZ(paintingReq))
 		{
 			tired = -1;
-			printf("I GAVE PRIORITY TO PAINTING FOR PART 3\n");
+			//printf("I GAVE PRIORITY TO PAINTING FOR PART 3\n");
 		}
 		pthread_mutex_unlock(&mutexPai);
 
@@ -205,7 +205,7 @@ void *ElfA(void *arg)
 		if (ContainsNZ(packagingReq))
 		{
 			tired = 0;
-			printf("I GAVE PRIORITY TO PACKAGING FOR PART 3\n");
+			//printf("I GAVE PRIORITY TO PACKAGING FOR PART 3\n");
 		}
 		pthread_mutex_unlock(&mutexPac);
 
@@ -220,18 +220,18 @@ void *ElfA(void *arg)
 			RequestTime = packed.reqTime;
 			TaskArrival = packed.taskArr;
 			prio = packed.prioritize;
-			printf("ELF A DID PACKAGING FOR ID: %d OF TYPE: %d \n", packed.ID, packed.type);
+			//printf("ELF A DID PACKAGING FOR ID: %d OF TYPE: %d \n", packed.ID, packed.type);
 			tired = 1;
 			pthread_mutex_unlock(&mutexPac); // RELEASE PACKAGE QUEUE LOCK
 			// printf("ELF A SLEEPS 1\n");
 			// pthread_sleep(1); // TAKE YOUR TIME
-			printf("ELF A SLEEPS 1\n");
+			//printf("ELF A SLEEPS 1\n");
 			pthread_sleep(1);			   // TAKE YOUR TIME
 			pthread_mutex_lock(&mutexDel); // TO ENQUEU TO DELIVERY QUEUE GET ITS LOCK
 			gettimeofday(&current_time, NULL);
 			packed.taskArr = current_time.tv_sec - start_time.tv_sec;
 			Enqueue(deliveryReq, packed); // SEND PACKED GIFT TO DELIVERY
-			printf("ELF A SEND TO DELIVERY ID: %d OF TYPE: %d \n", packed.ID, packed.type);
+			//printf("ELF A SEND TO DELIVERY ID: %d OF TYPE: %d \n", packed.ID, packed.type);
 			pthread_mutex_unlock(&mutexDel); // RELEASE DELIVERY LOCK
 			// DONE PACKAGING
 			pthread_mutex_lock(&mutexFile);
@@ -263,10 +263,10 @@ void *ElfA(void *arg)
 				RequestTime = painted.reqTime;
 				TaskArrival = painted.taskArr;
 				prio = painted.prioritize;
-				printf("ELF A DID PAINTING FOR ID: %d OF TYPE: %d \n", painted.ID, painted.type);
+			//	printf("ELF A DID PAINTING FOR ID: %d OF TYPE: %d \n", painted.ID, painted.type);
 				tired = 2;
 				pthread_mutex_unlock(&mutexPai); // GET THE LOCK OF PAINTING QUEUE
-				printf("ELF A SLEEPS 3\n");
+			//	printf("ELF A SLEEPS 3\n");
 				pthread_sleep(3); // TAKE YOUR TIME
 				// THERE ARE 2 CASES FOR NEXT TASK
 				if (painted.type == 2)
@@ -275,7 +275,7 @@ void *ElfA(void *arg)
 					gettimeofday(&current_time, NULL);
 					painted.taskArr = current_time.tv_sec - start_time.tv_sec;
 					Enqueue(packagingReq, painted); // SEND TASK TO PACKAGE QUEUE
-					printf("ELF A SEND TO PACKAGE ID: %d OF TYPE: %d \n", painted.ID, painted.type);
+			//		printf("ELF A SEND TO PACKAGE ID: %d OF TYPE: %d \n", painted.ID, painted.type);
 					pthread_mutex_unlock(&mutexPac);
 				}
 				else if (painted.type == 4)
@@ -288,7 +288,7 @@ void *ElfA(void *arg)
 						gettimeofday(&current_time, NULL);
 						painted.taskArr = current_time.tv_sec - start_time.tv_sec;
 						Enqueue(packagingReq, painted); // SEND TASK TO PACKAGING QUEUE
-						printf("ELF A SEND TO PACKAGE ID: %d OF TYPE: %d \n", painted.ID, painted.type);
+			//			printf("ELF A SEND TO PACKAGE ID: %d OF TYPE: %d \n", painted.ID, painted.type);
 						pthread_mutex_unlock(&mutexPac); // RELEASE PACKAGING QUEUE
 					}
 					else
@@ -345,7 +345,7 @@ void *ElfB(void *arg)
 		if (ContainsNZ(assemblyReq))
 		{
 			tired = -1;
-			printf("I GAVE PRIORITY TO ASSEMBLY FOR PART 3\n");
+			//printf("I GAVE PRIORITY TO ASSEMBLY FOR PART 3\n");
 		}
 		pthread_mutex_unlock(&mutexAs);
 
@@ -353,7 +353,7 @@ void *ElfB(void *arg)
 		if (ContainsNZ(packagingReq))
 		{
 			tired = 0;
-			printf("I GAVE PRIORITY TO PACKAGING FOR PART 3\n");
+			//printf("I GAVE PRIORITY TO PACKAGING FOR PART 3\n");
 		}
 		pthread_mutex_unlock(&mutexPac);
 
@@ -368,16 +368,16 @@ void *ElfB(void *arg)
 			RequestTime = packed.reqTime;
 			TaskArrival = packed.taskArr;
 			prio = packed.prioritize;
-			printf("ELF B DID PACKAGING FOR ID: %d OF TYPE: %d \n", packed.ID, packed.type);
+			//printf("ELF B DID PACKAGING FOR ID: %d OF TYPE: %d \n", packed.ID, packed.type);
 			tired = 1;
 			pthread_mutex_unlock(&mutexPac);
-			printf("ELF B SLEEPS 1\n");
+			//printf("ELF B SLEEPS 1\n");
 			pthread_sleep(1); // TAKE YOUR TIME
 			pthread_mutex_lock(&mutexDel);
 			gettimeofday(&current_time, NULL);
 			packed.taskArr = current_time.tv_sec - start_time.tv_sec;
 			Enqueue(deliveryReq, packed); // SEND TO DELIVERY AFTER PACKAGING
-			printf("ELF B SEND DELIVERY FOR ID: %d OF TYPE: %d \n", packed.ID, packed.type);
+			//printf("ELF B SEND DELIVERY FOR ID: %d OF TYPE: %d \n", packed.ID, packed.type);
 			pthread_mutex_unlock(&mutexDel);
 
 			pthread_mutex_lock(&mutexFile);
@@ -409,10 +409,10 @@ void *ElfB(void *arg)
 				RequestTime = assembled.reqTime;
 				TaskArrival = assembled.taskArr;
 				prio = assembled.prioritize;
-				printf("ELF B DID ASSEMBLY FOR ID: %d OF TYPE: %d \n", assembled.ID, assembled.type);
+				//printf("ELF B DID ASSEMBLY FOR ID: %d OF TYPE: %d \n", assembled.ID, assembled.type);
 				tired = 2;
 				pthread_mutex_unlock(&mutexAs);
-				printf("ELF B SLEEPS 2\n");
+				//printf("ELF B SLEEPS 2\n");
 				pthread_sleep(2); // TAKE YOUR TIME
 				if (assembled.type == 3)
 				{ // JUST DO ASSEMBLY AND SEND TO PACKAGING
@@ -420,7 +420,7 @@ void *ElfB(void *arg)
 					gettimeofday(&current_time, NULL);
 					assembled.taskArr = current_time.tv_sec - start_time.tv_sec;
 					Enqueue(packagingReq, assembled); // SEND TO PACKAGING AFTER ASSEMBLY
-					printf("ELF B SEND PACKAGE FOR ID: %d OF TYPE: %d \n", assembled.ID, assembled.type);
+					//printf("ELF B SEND PACKAGE FOR ID: %d OF TYPE: %d \n", assembled.ID, assembled.type);
 					pthread_mutex_unlock(&mutexPac);
 				}
 				else if (assembled.type == 5)
@@ -433,7 +433,7 @@ void *ElfB(void *arg)
 						gettimeofday(&current_time, NULL);
 						assembled.taskArr = current_time.tv_sec - start_time.tv_sec;
 						Enqueue(packagingReq, assembled); // SEND TO PACKAGING
-						printf("ELF B SEND PACKAGE FOR ID: %d OF TYPE: %d \n", assembled.ID, assembled.type);
+					//	printf("ELF B SEND PACKAGE FOR ID: %d OF TYPE: %d \n", assembled.ID, assembled.type);
 						pthread_mutex_unlock(&mutexPac);
 					}
 					else
@@ -486,26 +486,26 @@ void *Santa(void *arg)
 		if (qaReq->size >= 3)
 		{
 			tired = -1;
-			printf("I GAVE PRIORITY TO QA FOR PART 2\n");
+			//printf("I GAVE PRIORITY TO QA FOR PART 2\n");
 		}
 		pthread_mutex_unlock(&mutexQA);
 
 		// GIVE PRIORITY TO THE QUEUE WHICH HAS NEW ZEALANDER
-		pthread_mutex_lock(&mutexDel);
-		if (ContainsNZ(deliveryReq))
-		{
-			tired = 0;
-			printf("I GAVE PRIORITY TO DELIVERY FOR PART 3\n");
-		}
-		pthread_mutex_unlock(&mutexDel);
-
 		pthread_mutex_lock(&mutexQA);
 		if (ContainsNZ(qaReq))
 		{
 			tired = -1;
-			printf("I GAVE PRIORITY TO QA FOR PART 3\n");
+			//printf("I GAVE PRIORITY TO QA FOR PART 3\n");
 		}
 		pthread_mutex_unlock(&mutexQA);
+
+		pthread_mutex_lock(&mutexDel);
+		if (ContainsNZ(deliveryReq))
+		{
+			tired = 0;
+			//printf("I GAVE PRIORITY TO DELIVERY FOR PART 3\n");
+		}
+		pthread_mutex_unlock(&mutexDel);
 
 		// do delivery
 		pthread_mutex_lock(&mutexDel);
@@ -518,10 +518,10 @@ void *Santa(void *arg)
 			RequestTime = delivered.reqTime;
 			TaskArrival = delivered.taskArr;
 			prio = delivered.prioritize;
-			printf("SANTA DID DELIVERY FOR ID: %d OF TYPE: %d \n", delivered.ID, delivered.type);
+			//printf("SANTA DID DELIVERY FOR ID: %d OF TYPE: %d \n", delivered.ID, delivered.type);
 			tired = 1;
 			pthread_mutex_unlock(&mutexDel);
-			printf("SANTA SLEEPS 1\n");
+			//printf("SANTA SLEEPS 1\n");
 			pthread_sleep(1); // TAKE YOUR TIME
 			pthread_mutex_lock(&mutexFile);
 			FILE *file;
@@ -552,10 +552,10 @@ void *Santa(void *arg)
 				RequestTime = qaed.reqTime;
 				TaskArrival = qaed.taskArr;
 				prio = qaed.prioritize;
-				printf("SANTA DID QA FOR ID: %d OF TYPE: %d \n", qaed.ID, qaed.type);
+				//printf("SANTA DID QA FOR ID: %d OF TYPE: %d \n", qaed.ID, qaed.type);
 				tired = 2;
 				pthread_mutex_unlock(&mutexQA);
-				printf("SANTA SLEEPS\n");
+				//printf("SANTA SLEEPS\n");
 				pthread_sleep(1); // TAKE YOUR TIME
 				// printf("GONNA DO QA of type %d S\n", qaed.type);
 				if (qaed.type == 4)
@@ -568,7 +568,7 @@ void *Santa(void *arg)
 						gettimeofday(&current_time, NULL);
 						qaed.taskArr = current_time.tv_sec - start_time.tv_sec;
 						Enqueue(packagingReq, qaed); // SEND TO PACKAGING
-						printf("SANTA SEND PACKAGE FOR ID: %d OF TYPE: %d \n", qaed.ID, qaed.type);
+						//printf("SANTA SEND PACKAGE FOR ID: %d OF TYPE: %d \n", qaed.ID, qaed.type);
 						pthread_mutex_unlock(&mutexPac);
 						// printf("SENT TO PACKING FROM QA S\n");
 					}
@@ -588,7 +588,7 @@ void *Santa(void *arg)
 						gettimeofday(&current_time, NULL);
 						qaed.taskArr = current_time.tv_sec - start_time.tv_sec;
 						Enqueue(packagingReq, qaed); // IF ASSEMBLY DONE SEND TO PACKAGING
-						printf("SANTA SEND PACKAGE FOR ID: %d OF TYPE: %d \n", qaed.ID, qaed.type);
+						//printf("SANTA SEND PACKAGE FOR ID: %d OF TYPE: %d \n", qaed.ID, qaed.type);
 						pthread_mutex_unlock(&mutexPac);
 						// printf("SENT TO PACKING FROM QA S\n");
 					}
@@ -639,7 +639,7 @@ void *ControlThread(void *arg)
 		if ((current_time.tv_sec - start_time.tv_sec) % emergencyFrequency == 0)
 		{					  // PRIORITY TO FAR KIDS
 			t.prioritize = 1; // COME AT EVERY 30 T
-			printf("THERE IS A NEW ZEALANDER IN LINE\n");
+			//printf("THERE IS A NEW ZEALANDER IN LINE\n");
 		}
 		else
 		{
@@ -656,7 +656,7 @@ void *ControlThread(void *arg)
 			t.type = 1;
 			t.ID = counter; // 5 * counter + t.type;
 			gettimeofday(&current_time, NULL);
-			printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
+			//printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
 			pthread_mutex_lock(&mutexPac);
 			t.reqTime = current_time.tv_sec - start_time.tv_sec;
 			t.taskArr = current_time.tv_sec - start_time.tv_sec;
@@ -674,7 +674,7 @@ void *ControlThread(void *arg)
 				t.type = 2;
 				t.ID = counter; // 5 * counter + t.type;
 				gettimeofday(&current_time, NULL);
-				printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
+				//printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
 				pthread_mutex_lock(&mutexPai);
 				t.reqTime = current_time.tv_sec - start_time.tv_sec;
 				t.taskArr = current_time.tv_sec - start_time.tv_sec;
@@ -689,7 +689,7 @@ void *ControlThread(void *arg)
 				t.type = 3;
 				t.ID = counter; // 5 * counter + t.type;
 				gettimeofday(&current_time, NULL);
-				printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
+				//printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
 				pthread_mutex_lock(&mutexAs);
 				t.reqTime = current_time.tv_sec - start_time.tv_sec;
 				t.taskArr = current_time.tv_sec - start_time.tv_sec;
@@ -708,7 +708,7 @@ void *ControlThread(void *arg)
 				t.type = 4;
 				t.ID = counter; // 5 * counter + t.type;
 				gettimeofday(&current_time, NULL);
-				printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
+				//printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
 				pthread_mutex_lock(&mutexPai);
 				t.reqTime = current_time.tv_sec - start_time.tv_sec;
 				t.taskArr = current_time.tv_sec - start_time.tv_sec;
@@ -728,7 +728,7 @@ void *ControlThread(void *arg)
 				t.type = 5;
 				t.ID = counter; // 5 * counter + t.type;
 				gettimeofday(&current_time, NULL);
-				printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
+				//printf("INCOMING REQUEST FROM CONTROLLER Task ID %d, counter: %d, type: %d \n", t.ID, counter, t.type); // INCOMING REQUEST
 				pthread_mutex_lock(&mutexAs);
 				t.reqTime = current_time.tv_sec - start_time.tv_sec;
 				t.taskArr = current_time.tv_sec - start_time.tv_sec;
